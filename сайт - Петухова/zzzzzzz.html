@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Петелька - Главная</title>
+    <style>
+        /* ==========================================================================
+           ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СТРАНИЦ САЙТА (Можно копировать на другие страницы)
+           ========================================================================== */
+        
+        body {
+            background-color: #F2FEFF;   /* Светло-бирюзовый фон всего сайта */
+            color: #000;                 /* Основной цвет текста — черный */
+            font-family: Vollkorn BC;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Шапка сайта (Header) */
+        .site-header {
+            background: #F2FEFF;            /* Белая подложка под шапку */
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #C3E1E1; /* Тонкая бирюзовая линия снизу */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        /* Блок с логотипом */
+        .logo-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-img {
+            width: 55px;                 /* Размер главного логотипа */
+            height: auto;
+        }
+        .logo-text {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        /* Главное меню навигации */
+        .main-nav {
+            display: flex;
+            gap: 20px;                   /* Расстояние между кнопками меню */
+        }
+        .nav-btn {
+            background: #C3E1E1;         /* Фирменный нежно-бирюзовый цвет кнопок */
+            color: #000;
+            text-decoration: none;
+            padding: 8px 30px;
+            border-radius: 20px;         /* Округлые кнопки */
+            font-size: 15px;
+            text-transform: uppercase;   /* Текст заглавными буквами */
+            font-weight: bolder;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: #9ECECE;         /* Затемнение кнопок при наведении / активная кнопка */
+        }
+
+        /* Иконки соцсетей и профиля справа */
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .icon-link {
+            color: #C3E1E1;              /* Цвет иконок по умолчанию */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .icon-link:hover {
+            color: #9ECECE;
+        }
+        .icon-link svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;          /* Чтобы цвет менялся через CSS hover */
+        }
+        .icon-link img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Хлебные крошки / Текущий путь */
+        .breadcrumb {
+            padding: 15px 60px 0 60px;
+            font-size: 14px;
+            color: #9ecece;
+            text-transform: lowercase;
+        }
+
+        /* Кнопки действий (Заказать и т.д.) */
+        .action-btn {
+            font-weight: bold;
+            background: #9FAEAD;
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            padding: 10px 40px;
+            font-size: 22px;
+            text-transform: uppercase;
+            font-family: Vollkorn;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: background 0.3s ease, transform 0.1s ease;
+        }
+        .action-btn:hover {
+            background: #9ECECE;
+        }
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+/* ==========================================================================
+           КОНЕЦ ОБЩИХ СТИЛЕЙ (Далее идут уникальные стили для контента главной)
+           ========================================================================== */
+
+        /* Главный контейнер баннера */
+        .main-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;          /* Для позиционирования декоративных звезд */
+        }
+
+        /* Информационный баннер с размытым фоном вязаных ниток */
+        .banner-card {
+            background-image: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)), url('image/yarn_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 40px;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            min-height: 400px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Левая текстовая часть баннера */
+        .banner-text-side {
+            flex: 1;
+            max-width: 550px;
+        }
+        .banner-text-side h1 {
+            font-size: 42px;
+            margin: 0 0 10px 0;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .banner-text-side h3 {
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 20px 0;
+            font-weight: bold;
+        }
+
+        /* Список преимуществ */
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .features-list li {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+        }
+        /* Эмодзи-иконки перед пунктами */
+        .features-list li::before {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .features-list li.feat-1::before { content: "🧶"; }
+        .features-list li.feat-2::before { content: "🔒"; }
+        .features-list li.feat-3::before { content: "🧼"; }
+        .features-list li.feat-4::before { content: "✨"; }
+
+        /* Правая карточка товара (с поросенком) */
+        .product-preview-card {
+            background: #BED0CC;
+            border-radius: 30px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 380px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: relative;
+            top: 110px;
+            left: 100px;
+            z-index: 3;
+        }
+        .product-img {
+            width: 330px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 20px;
+            background: #fff;
+        }
+
+        /* Декоративные полупрозрачные зеленые звезды на фоне */
+        .bg-star {
+            position: absolute;
+            color: #C3E1E1;
+            opacity: 0.7;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .star-top-right {
+            top: -20px;
+            right: 0px;
+            width: 90px;
+            height: 90px;
+        }
+        .star-bottom-left {
+            bottom: -30px;
+            left: -10px;
+            width: 120px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="zzzzzzz.html" class="logo-block">
+            <img class="logo-img" src="C:\Users\Юлия\Desktop\сайт\image\vyazlog.png" alt="Петелька лого"xxxx>
+            <div class="logo-text">петелька</div>
+        </a>
+
+        <nav class="main-nav">
+            <a href="zzzzzzz.html" class="nav-btn active">Главная</a>
+            <a href="katalog.html" class="nav-btn">Каталог</a>
+            <a href="otsivi.html" class="nav-btn">Отзывы</a>
+            <a href="onas.html" class="nav-btn">О нас</a>
+            <a href="dostavka.html" class="nav-btn">Доставка</a>
+        </nav>
+
+        <div class="header-icons">
+            <a href="https://s00.yaplakal.com/pics/pics_original/7/4/5/20352547.jpg" class="icon-link" title="Макс">
+                <img src="image/max.png" alt="MAX">
+            </a>
+            <a href="https://vk.com/deadix" class="icon-link" title="ВКонтакте">
+                <img src="image/vk.png" alt="ВК">
+            </a>
+            <a href="https://t.me/d3ad1xx" class="icon-link" title="Telegram">
+                <img src="image/tg.png" alt="Telegram">
+            </a>
+            <a href="profile.html" class="icon-link" id="profileLink" title="Личный кабинет">
+                <img src="image/profile.png" alt="Профиль">
+            </a>
+        </div>
+    </header>
+
+    <div class="breadcrumb">главная</div>
+
+    <main class="main-container">
+        
+        <svg class="bg-star star-top-right" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        <svg class="bg-star star-bottom-left" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+
+        <div class="banner-card">
+            
+            <div class="banner-text-side">
+                <h1>Вязаные игрушки ручной работы</h1>
+                <h3>Почему выбирают нас</h3>
+                
+                <ul class="features-list">
+                    <li class="feat-1"><strong>Гипоаллергенная пряжа</strong> — безопасна даже для малышей, которые всё тянут в рот</li>
+                    <li class="feat-2"><strong>Надёжное крепление деталей</strong> — глазки, носики и лапки не оторвутся</li>
+                    <li class="feat-3"><strong>Можно стирать</strong> — наполнитель холлофайбер не сбивается и быстро сохнет</li>
+                    <li class="feat-4"><strong>Уникальный дизайн</strong> — вы не найдёте двух одинаковых игрушек, каждая — маленькое произведение искусства</li>
+                </ul>
+            </div>
+
+            <div class="product-preview-card">
+                <img class="product-img" src="image/pig.png" alt="Розовая свинка" onerror="this.style.background='#ccc'">
+                <button class="action-btn" id="orderMainBtn">Заказать</button>
+            </div>
+
+        </div>
+    </main>
+    <script>
+        // Скрипт автоматического перенаправления с иконки профиля
+        // Если пользователь авторизован, иконка ведет в его ЛК, если нет — на вход
+        document.getElementById('profileLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                window.location.href = currentUser.role === 'manager' ? 'mng.html' : 'pkp.html';
+            } else {
+                window.location.href = 'profile.html';
+            }
+        });
+
+        // Кнопка "Заказать" на главном баннере перекидывает в каталог
+        document.getElementById('orderMainBtn').addEventListener('click', function() {
+            window.location.href = 'katalog.html';
+        });
+    </script>
+</body>
+</html>

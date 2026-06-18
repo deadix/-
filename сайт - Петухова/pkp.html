@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Покупатель</title>
+    <style>
+        /* ==========================================================================
+           ОБЩИЕ СТИЛИ И ШРИФТЫ
+           ========================================================================== */
+        body {
+            background-color: #F2FEFF;
+            color: #222;
+            font-family: Vollkorn BC;
+            margin: 0;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        /* Хлебные крошки */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 0 auto 15px auto;
+            font-size: 14px;
+            color: #9ecece;
+        }
+        .breadcrumb a {
+            color: #5A9E9E;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover {
+            color: #3d6e6e;
+            text-decoration: underline;
+        }
+
+        /* Заголовок страницы */
+        h1.title {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            font-family: Vollkorn;
+            font-weight: bolder;
+            color: #333;
+        }
+
+        /* ==========================================================================
+           ГЛАВНЫЙ СЕТОЧНЫЙ МАКЕТ (DASHBOARD)
+           ========================================================================== */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Общий стиль для всех карточек */
+        .card {
+            background: #E1EFEF;
+            border: 2px solid #C3E1E1;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(195, 225, 225, 0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card-title {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: Vollkorn;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #4A7A7A;
+            border-bottom: 1px solid #E3F5F5;
+            padding-bottom: 10px;
+        }
+
+        /* ==========================================================================
+           ЛЕВАЯ КОЛОНКА: КАРТОЧКА ПРОФИЛЯ
+           ========================================================================== */
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Красивый аватар */
+        .avatar-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            background: #E3F7F7;
+            border: 2px solid #C3E1E1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #5A9E9E;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .role-badge {
+            margin-top: 8px;
+            background: #C3E1E1;
+            color: #2c4e4e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        /* Поля данных пользователя */
+        .profile-info-group {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #7A9E9E;
+            margin-bottom: 6px;
+            display: block;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .info-value-static {
+            font-size: 15px;
+            color: #333;
+            padding: 10px 0;
+            word-break: break-all;
+            font-weight: 500;
+        }
+        .info-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #C3E1E1;
+            border-radius: 8px;
+            font-size: 15px;
+            background: #F9FFFF;
+            color: #333;
+            box-sizing: border-box;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        .info-input:focus {
+            outline: none;
+            border-color: #5A9E9E;
+            background: #fff;
+        }
+        .info-input:disabled {
+            background: #F5FCFC;
+            border-color: #E3F2F2;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        /* Кнопки действий */
+        .profile-actions {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-primary {
+            background-color: #C3E1E1;
+            color: #1e3535;
+        }
+        .btn-primary:hover {
+            background-color: #B2D7D7;
+        }
+        .btn-secondary {
+            background-color: #FFF;
+            border: 2px solid #C3E1E1;
+            color: #4A7A7A;
+        }
+        .btn-secondary:hover {
+            background-color: #F2FEFF;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ==========================================================================
+           ПРАВАЯ КОЛОНКА: КОРЗИНА И ЗАКАЗЫ
+           ========================================================================== */
+        .content-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Ряд с картинками товаров */
+        .items-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            align-items: center;
+        }
+
+        /* Изображение игрушки */
+        .toy-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #E3F5F5;
+            background-color: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+        }
+        .toy-img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Нижняя панель действий в корзине/заказах */
+        .action-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #F5FCFC;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid #E3F5F5;
+            margin-top: 15px;
+        }
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .action-area .btn {
+            width: auto;
+            padding: 10px 25px;
+        }
+
+        /* Стилизация блока заказов */
+        .order-meta-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .empty-text {
+            color: #7A9E9E;
+            font-size: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="breadcrumb">
+        <a href="zzzzzzz.html">главная</a> / личный кабинет
+    </div>
+
+    <h1 class="title">Личный кабинет</h1>
+
+    <div class="dashboard-layout">
+        
+        <div class="card profile-card">
+            <div class="avatar-wrapper">
+                <div class="avatar-circle"><img src="image/profile.png" alt="Личный кабинет"></div>
+                <div class="role-badge" id="displayRole">Покупатель</div>
+            </div>
+
+            <div class="profile-info-group">
+                <span class="info-label">Электронная почта</span>
+                <div class="info-value-static" id="displayEmail">user@example.com</div>
+            </div>
+
+            <div class="profile-info-group">
+                <label class="info-label" for="inputName">Ваше имя</label>
+                <input class="info-input" type="text" id="inputName" value="Имя" disabled>
+            </div>
+
+            <div class="profile-info-group">
+                <label class="info-label" for="inputPhone">Телефон</label>
+                <input class="info-input" type="text" id="inputPhone" value="+79991112233" disabled>
+            </div>
+
+            <div class="profile-actions">
+                <button class="btn btn-primary" id="btnEdit">редактировать</button>
+                <button class="btn btn-secondary" id="btnExit">выйти из аккаунта</button>
+            </div>
+        </div>
+
+        <div class="content-column">
+            
+            <div class="card" id="cartCard">
+                <div class="card-title">Корзина товаров</div>
+                <div class="items-row" id="cartItems">
+                    </div>
+                <div class="action-area" id="cartActionArea" style="display: none;">
+                    <div class="price" id="cartPrice">0₽</div>
+                    <button class="btn btn-primary" id="btnOrder">Заказать игрушки</button>
+                </div>
+            </div>
+
+            <div class="card" id="ordersCard">
+                <div class="card-title">Мои заказы</div>
+                
+                <p class="empty-text" id="emptyOrdersText">У вас пока нет активных заказов.</p>
+                
+                <div id="orderContent" style="display: none;">
+                    <div class="order-meta-info" id="orderMeta">последний заказ: №0000 от 00.00.0000</div>
+                    <div class="items-row" id="orderedItems">
+                        </div>
+                    <div class="action-area">
+                        <span style="font-size: 14px; color: #555; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Статус: В обработке</span>
+                        <div class="price" id="orderPrice">0₽</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Проверка авторизации
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser || currentUser.role !== 'buyer') {
+            window.location.href = 'profile.html';
+        }
+
+        // Заполнение данных профиля
+        function loadProfileData() {
+            document.getElementById('displayEmail').textContent = currentUser.email;
+            document.getElementById('inputName').value = currentUser.name || 'Имя';
+            document.getElementById('inputPhone').value = currentUser.phone || 'Введите телефон';
+            document.getElementById('displayRole').textContent = currentUser.role === 'buyer' ? 'Покупатель' : 'Менеджер';
+        }
+        loadProfileData();
+
+        // Редактирование профиля
+        const btnEdit = document.getElementById('btnEdit');
+        const inputName = document.getElementById('inputName');
+        const inputPhone = document.getElementById('inputPhone');
+        let isEditing = false;
+
+        btnEdit.addEventListener('click', function() {
+            if (!isEditing) {
+                inputName.disabled = false;
+                inputPhone.disabled = false;
+                inputName.focus();
+                btnEdit.textContent = 'сохранить';
+                isEditing = true;
+            } else {
+                currentUser.name = inputName.value.trim();
+                currentUser.phone = inputPhone.value.trim();
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                let users = JSON.parse(localStorage.getItem('siteUsers')) || [];
+                let userIndex = users.findIndex(u => u.email === currentUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex].name = currentUser.name;
+                    users[userIndex].phone = currentUser.phone;
+                    localStorage.setItem('siteUsers', JSON.stringify(users));
+                }
+
+                inputName.disabled = true;
+                inputPhone.disabled = true;
+                btnEdit.textContent = 'редактировать';
+                isEditing = false;
+                alert('Профиль успешно обновлен!');
+            }
+        });
+
+        // Выход
+        document.getElementById('btnExit').addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'profile.html';
+        });
+
+        // ==========================================
+        // ДИНАМИЧЕСКАЯ КОРЗИНА И ЗАКАЗЫ
+        // ==========================================
+        const btnOrder = document.getElementById('btnOrder');
+        const cartItems = document.getElementById('cartItems');
+        const cartActionArea = document.getElementById('cartActionArea');
+        const orderContent = document.getElementById('orderContent');
+        const emptyOrdersText = document.getElementById('emptyOrdersText');
+        const orderedItemsContainer = document.getElementById('orderedItems');
+        const orderMeta = document.getElementById('orderMeta');
+        const orderPrice = document.getElementById('orderPrice');
+
+        const cartKey = 'userCart_' + currentUser.email;
+        const orderKey = 'activeOrder_' + currentUser.email;
+
+        // Отображение актуального содержимого корзины
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem(cartKey)) || { items: [], totalPrice: 0 };
+            
+            if (cart.items.length === 0) {
+                cartItems.innerHTML = '<p class="empty-text">Корзина пуста</p>';
+                cartActionArea.style.display = 'none';
+            } else {
+                cartItems.innerHTML = '';
+                cartActionArea.style.display = 'flex';
+                document.getElementById('cartPrice').textContent = cart.totalPrice + '₽';
+                
+                cart.items.forEach(item => {
+                    const img = document.createElement('img');
+                    img.className = 'toy-img';
+                    img.src = item.img;
+                    img.alt = item.name;
+                    img.onerror = function() { this.style.background = '#ccc'; };
+                    cartItems.appendChild(img);
+                });
+            }
+        }
+
+        // Оформление заказа (перенос из корзины в заказы)
+        btnOrder.addEventListener('click', function() {
+            const cart = JSON.parse(localStorage.getItem(cartKey));
+            if (!cart || cart.items.length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+
+            const now = new Date();
+            const dateStr = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + now.getFullYear();
+            const orderId = '№' + Math.floor(Math.random() * 9000 + 1000); 
+            
+            const orderData = {
+                meta: `последний заказ: ${orderId} от ${dateStr}`,
+                price: cart.totalPrice + '₽',
+                imgSrcs: cart.items.map(item => item.img)
+            };
+            
+            // Сохраняем заказ и очищаем корзину
+            localStorage.setItem(orderKey, JSON.stringify(orderData));
+            localStorage.removeItem(cartKey);
+
+            // Перерисовываем экран
+            displayCart();
+            renderOrder(orderData);
+            alert('Заказ успешно оформлен!');
+        });
+
+        function renderOrder(orderData) {
+            orderMeta.textContent = orderData.meta;
+            orderPrice.textContent = orderData.price;
+            orderedItemsContainer.innerHTML = '';
+            
+            orderData.imgSrcs.forEach(src => {
+                const img = document.createElement('img');
+                img.className = 'toy-img';
+                img.src = src;
+                img.onerror = function() { this.style.background = '#ccc'; };
+                orderedItemsContainer.appendChild(img);
+            });
+
+            emptyOrdersText.style.display = 'none';
+            orderContent.style.display = 'block';
+        }
+
+        // Инициализация при загрузке страницы
+        displayCart();
+        
+        if (localStorage.getItem(orderKey)) {
+            const savedOrder = JSON.parse(localStorage.getItem(orderKey));
+            renderOrder(savedOrder);
+        }
+    </script>
+</body>
+</html>

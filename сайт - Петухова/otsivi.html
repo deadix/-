@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Петелька - Отзывы</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn+SC:wght@400;700&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СТРАНИЦ САЙТА (ТОЧЬ-В-ТОЧЬ ИЗ ZZZZZZZ.HTML)
+           ========================================================================== */
+        
+        body {
+            background-color: #F2FEFF;   /* Светло-бирюзовый фон всего сайта */
+            color: #000;                 /* Основной цвет текста — черный */
+            font-family: Vollkorn BC;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Шапка сайта (Header) */
+        .site-header {
+            background: #F2FEFF;            /* Белая подложка под шапку */
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #C3E1E1; /* Тонкая бирюзовая линия снизу */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        /* Блок с логотипом */
+        .logo-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-img {
+            width: 55px;                 /* Размер главного логотипа */
+            height: auto;
+        }
+        .logo-text {
+            font-size: 11px;
+            font-family: Vollkorn BC;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        /* Главное меню навигации */
+        .main-nav {
+            display: flex;
+            gap: 20px;                   /* Расстояние между кнопками меню */
+        }
+        .nav-btn {
+            background: #C3E1E1;         /* Фирменный нежно-бирюзовый цвет кнопок */
+            color: #000;
+            text-decoration: none;
+            padding: 8px 30px;
+            border-radius: 20px;         /* Округлые кнопки */
+            font-size: 15px;
+            text-transform: uppercase;   /* Текст заглавными буквами */
+            font-weight: bolder;
+            font-family: Vollkorn BC;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: #9ECECE;         /* Затемнение кнопок при наведении / активная кнопка */
+        }
+
+        /* Иконки соцсетей и профиля справа */
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .icon-link {
+            color: #C3E1E1;              /* Цвет иконок по умолчанию */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .icon-link:hover {
+            color: #9ECECE;
+        }
+        .icon-link svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;          /* Чтобы цвет менялся через CSS hover */
+        }
+        .icon-link img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Хлебные крошки / Текущий путь */
+        .breadcrumb {
+            padding: 15px 60px 0 60px;
+            font-size: 14px;
+            font-family: Vollkorn BC    ;
+            color: #9ecece;
+            text-transform: lowercase;
+        }
+
+        /* ==========================================================================
+           УНИКАЛЬНЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ ОТЗЫВОВ
+           ========================================================================== */
+        .title-section {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .title-section h1 {
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 28px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        /* Сетка отзывов (2 колонки) */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px 60px;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 850px) {
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Карточка отзыва */
+        .review-card {
+            background: #E1EFEF;
+            border: 1px solid #C3E1E1;
+            border-radius: 30px;
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            font-family: 'Vollkorn', serif;
+            position: relative; 
+        }
+
+        /* Кнопка удаления своего отзыва */
+        .delete-review-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #c97d7d;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            padding: 0;
+            line-height: 1;
+        }
+        .delete-review-btn:hover {
+            color: #b33939;
+            transform: scale(1.2);
+        }
+
+        .review-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 85px;
+        }
+
+        .user-photo {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #fff;
+            margin-bottom: 10px;
+            border: 1px solid #9ECECE;
+        }
+
+        .stars-row {
+            display: flex;
+            gap: 2px;
+            font-size: 15px;
+        }
+        .star-filled { color: #C49A45; }
+        .star-empty { color: #B0D0D0; }
+
+        .review-right {
+            flex: 1;
+            padding-right: 15px;
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #000;
+            font-family: 'Vollkorn SC', serif;
+        }
+
+        /* Текстовая линия под отзывом (вместо плашки) */
+        .review-text-box {
+            font-size: 15px;
+            line-height: 1.4;
+            color: #000;
+            min-height: 50px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #C3E1E1; /* Линия под текстом отзыва */
+        }
+
+        /* Кнопка "ОСТАВИТЬ ОТЗЫВ" */
+        .action-btn-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .btn-trigger-review {
+            background-color: #9FAEAD;
+            color: #000;
+            border: none;
+            font-family: 'Vollkorn SC', serif;
+            text-transform: uppercase;
+            font-size: 22px;
+            padding: 10px 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: background 0.3s ease;
+            font-weight: bold;
+        }
+        .btn-trigger-review:hover {
+            background-color: #9ECECE;
+        }
+
+        /* ==========================================================================
+           МОДАЛЬНОЕ ОКНО ФОРМЫ
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-window {
+            background-color: #F2FEFF;
+            border: 2px solid #C3E1E1;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            position: relative;
+            font-family: 'Vollkorn', serif;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #4A7A7A;
+        }
+
+        .modal-title {
+            font-family: 'Vollkorn SC', serif;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-family: 'Vollkorn SC', serif;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #C3E1E1;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: 'Vollkorn', serif;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .form-textarea {
+            resize: vertical;
+            height: 90px;
+        }
+
+        .form-submit-btn {
+            background-color: #9FAEAD;
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: 'Vollkorn SC', serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .form-submit-btn:hover {
+            background-color: #9ECECE;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="zzzzzzz.html" class="logo-block">
+            <img class="logo-img" src="C:\Users\Юлия\Desktop\сайт\image\vyazlog.png" alt="Петелька лого"xxxx>
+            <div class="logo-text">петелька</div>
+        </a>
+
+        <nav class="main-nav">
+            <a href="zzzzzzz.html" class="nav-btn">Главная</a>
+            <a href="katalog.html" class="nav-btn">Каталог</a>
+            <a href="otsivi.html" class="nav-btn active">Отзывы</a>
+            <a href="onas.html" class="nav-btn">О нас</a>
+            <a href="dostavka.html" class="nav-btn">Доставка</a>
+        </nav>
+
+        <div class="header-icons">
+            <a href="https://s00.yaplakal.com/pics/pics_original/7/4/5/20352547.jpg" class="icon-link" title="Макс">
+                <img src="image/max.png" alt="MAX">
+            </a>
+            <a href="https://vk.com/deadix" class="icon-link" title="ВКонтакте">
+                <img src="image/vk.png" alt="ВК">
+            </a>
+            <a href="https://t.me/d3ad1xx" class="icon-link" title="Telegram">
+                <img src="image/tg.png" alt="Telegram">
+            </a>
+            <a href="profile.html" class="icon-link" id="profileLink" title="Личный кабинет">
+                <img src="image/profile.png" alt="Профиль">
+            </a>
+        </div>
+    </header>
+
+        <div class="breadcrumb">
+        <a href="zzzzzzz.html" style="color: #5A9E9E; text-decoration: none;">главная</a> / отзывы
+    </div>
+
+    <main class="main-container">
+        
+        <div class="title-section">
+            <h1>Отзывы наших клиентов</h1>
+        </div>
+
+        <div class="reviews-grid" id="reviewsGrid">
+            </div>
+
+        <div class="action-btn-container">
+            <button class="btn-trigger-review" id="openModalBtn">Оставить отзыв</button>
+        </div>
+
+    </main>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-window">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <div class="modal-title">Оставить отзыв</div>
+            
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label for="reviewName">Ваше имя</label>
+                    <input type="text" id="reviewName" class="form-input" readonly required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reviewRating">Ваша оценка</label>
+                    <select id="reviewRating" class="form-select">
+                        <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                        <option value="4">⭐⭐⭐⭐ (4)</option>
+                        <option value="3">⭐⭐⭐ (3)</option>
+                        <option value="2">⭐⭐ (2)</option>
+                        <option value="1">⭐ (1)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewText">Текст отзыва</label>
+                    <textarea id="reviewText" class="form-textarea" placeholder="Расскажите о ваших впечатлениях..." required></textarea>
+                </div>
+
+                <button type="submit" class="form-submit-btn">Опубликовать</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Автоматическое перенаправление с иконки профиля (из zzzzzzz.html)
+        document.getElementById('profileLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                window.location.href = currentUser.role === 'manager' ? 'mng.html' : 'pkp.html';
+            } else {
+                window.location.href = 'profile.html';
+            }
+        });
+
+        // База отзывов из графического макета
+        const initialReviews = [
+            {
+                email: "system1",
+                name: "Ксения К.",
+                text: "Купила игрушку для подруги. Она ее сожгла. Игрушки хорошие буду брать еще, надеюсь не сгорят.",
+                rating: 5,
+                avatar: "image/4.png"
+            },
+            {
+                email: "system2",
+                name: "Иван Л.",
+                text: "Подарили вязанного кота. Сделал дырку. Очень понравилось!",
+                rating: 5,
+                avatar: "image/3.png"
+            },
+            {
+                email: "system3",
+                name: "Кристина М.",
+                text: "Подарили белочку, она конечно красивая, но с меня хватит.",
+                rating: 4,
+                avatar: "image/1.png"
+            },
+            {
+                email: "system4",
+                name: "Алексей Н.",
+                text: "Купил дочке осьминога, она съела все щупальца! Больше ничего не куплю!!",
+                rating: 1,
+                avatar: "image/2.png"
+            }
+        ];
+
+        if (!localStorage.getItem('siteReviews')) {
+            localStorage.setItem('siteReviews', JSON.stringify(initialReviews));
+        }
+
+        function getStarsHtml(rating) {
+            let html = '';
+            for(let i = 1; i <= 5; i++) {
+                html += (i <= rating) ? '<span class="star-filled">★</span>' : '<span class="star-empty">★</span>';
+            }
+            return html;
+        }
+
+        function renderAllReviews() {
+            const grid = document.getElementById('reviewsGrid');
+            const data = JSON.parse(localStorage.getItem('siteReviews'));
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            grid.innerHTML = '';
+
+            data.forEach((item, index) => {
+                let deleteButtonHtml = '';
+                if (currentUser) {
+                    if (currentUser.role === 'manager' || currentUser.email === item.email) {
+                        deleteButtonHtml = `<button class="delete-review-btn" onclick="deleteReview(${index})" title="Удалить отзыв">&times;</button>`;
+                    }
+                }
+
+                grid.innerHTML += `
+                    <div class="review-card">
+                        ${deleteButtonHtml}
+                        <div class="review-left">
+                            <img class="user-photo" src="${item.avatar}" alt="User">
+                            <div class="stars-row">${getStarsHtml(item.rating)}</div>
+                        </div>
+                        <div class="review-right">
+                            <div class="user-name">${item.name}</div>
+                            <div class="review-text-box">${item.text}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.deleteReview = function(index) {
+            if (confirm('Вы действительно хотите удалить этот отзыв?')) {
+                const currentReviews = JSON.parse(localStorage.getItem('siteReviews'));
+                currentReviews.splice(index, 1);
+                localStorage.setItem('siteReviews', JSON.stringify(currentReviews));
+                renderAllReviews();
+            }
+        }
+
+        renderAllReviews();
+
+        // Управление модальным окном
+        const modalOverlay = document.getElementById('modalOverlay');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewNameInput = document.getElementById('reviewName');
+
+        openModalBtn.addEventListener('click', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+            if (!currentUser) {
+                alert('Оставлять отзывы могут только авторизованные клиенты! Пожалуйста, выполните вход.');
+                window.location.href = 'profile.html';
+                return;
+            }
+
+            reviewNameInput.value = currentUser.name || currentUser.email.split('@')[0];
+            modalOverlay.classList.add('active');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+            reviewForm.reset();
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+                reviewForm.reset();
+            }
+        });
+
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const ratingValue = parseInt(document.getElementById('reviewRating').value);
+            const textValue = document.getElementById('reviewText').value.trim();
+            
+            const colors = ['%23B6E2DC', '%23C9B6E2', '%23E2B6D4', '%23CCE2B6'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const userAvatar = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='75' height='75' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='${randomColor}'/><circle cx='50' cy='40' r='19' fill='%23fff'/><path d='M22 82c0-12 14-22 28-22s28 10 28 22' fill='%23fff'/></svg>`;
+
+            const newReview = {
+                email: currentUser.email,
+                name: reviewNameInput.value,
+                text: textValue,
+                rating: ratingValue,
+                avatar: userAvatar
+            };
+
+            const currentReviews = JSON.parse(localStorage.getItem('siteReviews'));
+            currentReviews.push(newReview);
+            localStorage.setItem('siteReviews', JSON.stringify(currentReviews));
+
+            renderAllReviews();
+            modalOverlay.classList.remove('active');
+            reviewForm.reset();
+            alert('Спасибо за отзыв! Он успешно добавлен.');
+        });
+    </script>
+</body>
+</html>

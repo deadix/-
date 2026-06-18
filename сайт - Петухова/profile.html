@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <style>
+         body {
+            background-color: #F2FEFF;   /* светлый фон */
+            color: #000;                 /* тёмный текст для читаемости на светлом фоне */
+            font-family: 'Akshar', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .box {
+            background: #fff;              /* белый контейнер для контраста */
+            border: 2px solid #C3E1E1;     /* рамка в цвет кнопок */
+            border-radius: 12px;           /* скругление */
+            padding: 30px;
+            width: 320px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* лёгкая тень для мягкости */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #000;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 4px;
+            background: #F2FEFF;          /* поля чуть светлее основного фона */
+            border: 1px solid #C3E1E1;
+            border-radius: 8px;           /* скругление полей */
+            color: #000;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #C3E1E1;          /* нежно-бирюзовая кнопка */
+            border: none;
+            border-radius: 8px;           /* скругление */
+            color: #000;                  /* тёмный текст */    
+            padding: 12px 30px;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #9ECECE;          /* затемнённый оттенок при наведении */
+        }
+
+        .error {
+            color: #cc0000;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .toggle {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .toggle a {
+            color: #5A9E9E;              /* ссылка в тон кнопкам, но темнее */
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .back-link a {
+            color: #5A9E9E;
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <!-- Форма входа -->
+        <div id="loginBlock">
+            <h2>Вход</h2>
+            <form id="loginForm">
+                <label>Email <input type="email" name="email" required></label>
+                <label>Пароль <input type="password" name="password" required></label>
+                <button type="submit">Войти</button>
+            </form>
+            <div class="error" id="loginError"></div>
+            <div class="toggle">
+                Нет аккаунта? <a id="showReg">Зарегистрироваться</a>
+            </div>
+        </div>
+
+        <!-- Форма регистрации (изначально скрыта) -->
+        <div id="regBlock" class="hidden">
+            <h2>Регистрация</h2>
+            <form id="regForm">
+                <label>Имя <input type="text" name="name" required></label>
+                <label>Email <input type="email" name="email" required></label>
+                <label>Пароль <input type="password" name="password" required minlength="4"></label>
+                <label>Роль
+                    <select name="role" required>
+                        <option value="">-- выберите --</option>
+                        <option value="buyer">Покупатель</option>
+                        <option value="manager">Менеджер</option>
+                    </select>
+                </label>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+            <div class="error" id="regError"></div>
+            <div class="toggle">
+                Уже зарегистрированы? <a id="showLogin">Войти</a>
+            </div>
+        </div>
+
+        <p class="back-link"><a href="zzzzzzz.html">← На главную</a></p>
+    </div>
+
+    <script>
+        // Переключение между входом и регистрацией
+        document.getElementById('showReg').addEventListener('click', function() {
+            document.getElementById('loginBlock').classList.add('hidden');
+            document.getElementById('regBlock').classList.remove('hidden');
+        });
+        document.getElementById('showLogin').addEventListener('click', function() {
+            document.getElementById('regBlock').classList.add('hidden');
+            document.getElementById('loginBlock').classList.remove('hidden');
+        });
+
+        // Вход
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.email.value.trim();
+            const password = this.password.value;
+            const users = JSON.parse(localStorage.getItem('siteUsers')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                window.location.href = user.role === 'manager' ? 'mng.html' : 'pkp.html';
+            } else {
+                document.getElementById('loginError').textContent = 'Неверный email или пароль';
+            }
+        });
+
+        // Регистрация
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = this.name.value.trim();
+            const email = this.email.value.trim();
+            const password = this.password.value;
+            const role = this.role.value;
+            const users = JSON.parse(localStorage.getItem('siteUsers')) || [];
+            if (users.some(u => u.email === email)) {
+                document.getElementById('regError').textContent = 'Такой email уже зарегистрирован';
+                return;
+            }
+            const newUser = { name, email, password, role };
+            users.push(newUser);
+            localStorage.setItem('siteUsers', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            window.location.href = role === 'manager' ? 'mng.html' : 'pkp.html';
+        });
+    </script>
+</body>
+</html>

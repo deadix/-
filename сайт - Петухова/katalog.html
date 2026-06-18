@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Петелька - Каталог</title>
+    <style>
+        /* ==========================================================================
+           ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СТРАНИЦ САЙТА (Скопировано из главной zzzzzzz.html)
+           ========================================================================== */
+        
+        body {
+            background-color: #F2FEFF;   /* Светло-бирюзовый фон всего сайта */
+            color: #000;                 /* Основной цвет текста — черный */
+            font-family: Vollkorn BC;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Шапка сайта (Header) */
+        .site-header {
+            background: #F2FEFF;            
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #C3E1E1; /* Тонкая бирюзовая линия снизу */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        /* Блок с логотипом */
+        .logo-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-img {
+            width: 55px;                 
+            height: auto;
+        }
+        .logo-text {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        /* Главное меню навигации */
+        .main-nav {
+            display: flex;
+            gap: 20px;                   
+        }
+        .nav-btn {
+            background: #C3E1E1;         /* Фирменный нежно-бирюзовый цвет кнопок */
+            color: #000;
+            text-decoration: none;
+            padding: 8px 30px;
+            border-radius: 20px;         
+            font-size: 15px;
+            text-transform: uppercase;   
+            font-weight: bolder;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: #9ECECE;         
+        }
+
+        /* Иконки справа */
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .icon-link {
+            text-decoration: none;
+        }
+        .icon-link img {
+            width: 26px;             
+            height: 26px;            
+            object-fit: contain;     
+            display: block;
+        }
+
+        /* Хлебные крошки */
+        .breadcrumb {
+            padding: 15px 60px 0 60px;
+            font-size: 14px;
+            color: #9ecece;
+            text-transform: lowercase;
+        }
+
+        /* Кнопки действий */
+        .action-btn {
+            background: #C3E1E1;
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            padding: 8px 25px;
+            font-family: Vollkorn BC;
+            font-size: 18px;
+            font-weight: bolder;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: background 0.3s ease, transform 0.1s ease;
+        }
+        .action-btn:hover {
+            background: #9ECECE;
+        }
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ==========================================================================
+           УНИКАЛЬНЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ КАТАЛОГА СО СЛАЙДЕРОМ
+           ========================================================================== */
+
+        .catalog-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        .catalog-title {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 28px;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            font-family: Vollkorn BC;
+            font-weight: bolder;
+        }
+
+        /* Главная обертка слайдера со стрелками по бокам */
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* Окно видимости слайдов */
+        .slider-viewport {
+            overflow: hidden;
+            width: 100%;
+            padding: 15px 5px;
+        }
+
+        /* Лента товаров, которая будет двигаться */
+        .slider-track {
+            display: flex;
+            gap: 30px;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        /* Кнопки-стрелочки управления слайдером */
+        .slider-arrow {
+            background: #C3E1E1;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            transition: background 0.3s ease, transform 0.2s ease;
+            user-select: none;
+            flex-shrink: 0;
+        }
+        .slider-arrow:hover {
+            background: #9ECECE;
+        }
+        .slider-arrow:active {
+            transform: scale(0.9);
+        }
+        .slider-arrow.disabled {
+            background: #E5F5F5;
+            color: #B2D8D8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Карточка товара (Каждого отдельного слайда) */
+        .product-card {
+            background: #E1EFEF;
+            border-radius: 30px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 260px; /* Фиксированная ширина карточки */
+            flex-shrink: 0; /* Чтобы карточки не сжимались в ленте */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 220px;
+            height: 210px;
+            object-fit: cover;
+            border-radius: 20px;
+            background: #fff;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 20px;
+            margin: 0 0 8px 0;
+            font-family: Vollkorn;
+            font-weight: bold;
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: #555;
+            margin: 0 0 15px 0;
+            height: 36px;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+
+        .product-footer {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding: 0 5px;
+        }
+
+        .product-price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="zzzzzzz.html" class="logo-block">
+            <img class="logo-img" src="image/vyazlog.png" alt="Петелька лого"> 
+            <div class="logo-text">петелька</div>
+        </a>
+
+        <nav class="main-nav">
+            <a href="zzzzzzz.html" class="nav-btn">Главная</a>
+            <a href="katalog.html" class="nav-btn active">Каталог</a>
+            <a href="otsivi.html" class="nav-btn">Отзывы</a>
+            <a href="onas.html" class="nav-btn">О нас</a>
+            <a href="dostavka.html" class="nav-btn">Доставка</a>
+        </nav>
+
+        <div class="header-icons">
+            <a href="https://s00.yaplakal.com/pics/pics_original/7/4/5/20352547.jpg" class="icon-link" title="Чат"><img src="image/max.png" alt="Макс"></a>
+            <a href="https://vk.com/deadix" class="icon-link" title="ВКонтакте"><img src="image/vk.png" alt="ВКонтакте"></a>
+            <a href="https://t.me/d3ad1xx" class="icon-link" title="Telegram"><img src="image/tg.png" alt="Telegram"></a>
+            <a href="profile.html" class="icon-link" id="profileLink" title="Личный кабинет"><img src="image/profile.png" alt="Личный кабинет"></a>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="zzzzzzz.html" style="color: #5A9E9E; text-decoration: none;">главная</a> / каталог
+    </div>
+
+    <main class="catalog-container">
+        <h2 class="catalog-title">Каталог игрушек</h2>
+
+        <div class="slider-wrapper">
+            <button class="slider-arrow" id="arrowPrev">&lsaquo;</button>
+
+            <div class="slider-viewport">
+                <div class="slider-track" id="sliderTrack">
+                    
+                    <div class="product-card">
+                        <img src="image/pig.png" alt="Поросёнок Хрюня" onerror="this.style.background='#ccc'">
+                        <div class="product-name">Поросёнок Хрюня</div>
+                        <div class="product-desc">Нежно-розовый плюшевый поросёнок в тёплом шарфике.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1200₽</span>
+                            <button class="action-btn buy-btn" data-id="1" data-name="Свинка Хрюня" data-price="1200" data-img="image/pig.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/bear.png" alt="Мишка Топтыжка">
+                        <div class="product-name">Мишка Топтыжка</div>
+                        <div class="product-desc">Классический вязаный медвежонок из эко-пряжи.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1500₽</span>
+                            <button class="action-btn buy-btn" data-id="2" data-name="Мишка Топтыжка" data-price="1500" data-img="image/bear.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/rabbit.png" alt="Зайка Мия">
+                        <div class="product-name">Зайка Мия</div>
+                        <div class="product-desc">Милый зайчонок с очень длинными и мягкими ушками.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1300₽</span>
+                            <button class="action-btn buy-btn" data-id="3" data-name="Зайка Мия" data-price="1300" data-img="image/rabbit.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/kotopes.png" alt="Кото-зайка">
+                        <div class="product-name">Кото-зайка</div>
+                        <div class="product-desc">Сплав из двух самых милых в мире животных.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1400₽</span>
+                            <button class="action-btn buy-btn" data-id="4" data-name="Кото-зайка" data-price="1400" data-img="image/kotopes.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/cat.png" alt="Котик">
+                        <div class="product-name">Котик</div>
+                        <div class="product-desc">Обаятельный котик, который поднимет любое настроение.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1100₽</span>
+                            <button class="action-btn buy-btn" data-id="5" data-name="Котик" data-price="1100" data-img="image/cat.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/octopus.png" alt="Осьминожка" onerror="this.style.background='#ccc'">
+                        <div class="product-name">Осьминожка</div>
+                        <div class="product-desc">Весёлый осьминожка, не суйте щупальца куда попало.</div>
+                        <div class="product-footer">
+                            <span class="product-price">2200₽</span>
+                            <button class="action-btn buy-btn" data-id="6" data-name="Осьминожка" data-price="2200" data-img="image/octopus.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/pauk.png" alt="Паучок Пётр" onerror="this.style.background='#ccc'">
+                        <div class="product-name">Паучок Пётр</div>
+                        <div class="product-desc">Маленький ласковый паучок который совсем не кусается.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1600₽</span>
+                            <button class="action-btn buy-btn" data-id="7" data-name="Паучок Пётр" data-price="1600" data-img="image/pauk.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/squirell.png" alt="Белочка Кристина" onerror="this.style.background='#ccc'">
+                        <div class="product-name">Белочка Кристина</div>
+                        <div class="product-desc">Стильная белочка, звезда соцсетей. Приходит когда не ждёшь.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1250₽</span>
+                            <button class="action-btn buy-btn" data-id="8" data-name="Белочка Кристина" data-price="1250" data-img="image/squirell.png">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="image/slonik.png" alt="Слоник Тёма">
+                        <div class="product-name">Слоник Тёма</div>
+                        <div class="product-desc">Главный слоник Волгограда.</div>
+                        <div class="product-footer">
+                            <span class="product-price">1350₽</span>
+                            <button class="action-btn buy-btn" data-id="9" data-name="Слоник Тёма" data-price="1350" data-img="image/slonik.png">Заказать</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <button class="slider-arrow" id="arrowNext">&rsaquo;</button>
+        </div>
+    </main>
+
+<script>
+        // ИСПРАВЛЕНО: Маленькая буква l в названии localStorage
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        
+        // ==========================================
+        // ЛОГИКА РАБОТЫ ИНТЕРАКТИВНОГО СЛАЙДЕРА
+        // ==========================================
+        const track = document.getElementById('sliderTrack');
+        const btnPrev = document.getElementById('arrowPrev');
+        const btnNext = document.getElementById('arrowNext');
+
+        let currentIndex = 0;
+        const totalItems = 9;
+        
+        function getSlideWidth() {
+            const card = document.querySelector('.product-card');
+            return card.getBoundingClientRect().width + 30; 
+        }
+
+        function updateSlider() {
+            const slideWidth = getSlideWidth();
+            // ИСПРАВЛЕНО: Использование косых кавычек (шаблонных строк) для корректного рассчета стилей
+            track.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
+            
+            const viewportWidth = document.querySelector('.slider-viewport').getBoundingClientRect().width;
+            const visibleCards = Math.floor(viewportWidth / getSlideWidth());
+            const maxIndex = totalItems - (visibleCards > 0 ? visibleCards : 1);
+
+            btnPrev.classList.toggle('disabled', currentIndex === 0);
+            btnNext.classList.toggle('disabled', currentIndex >= maxIndex || maxIndex <= 0);
+        }
+
+        btnPrev.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlider();
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            const viewportWidth = document.querySelector('.slider-viewport').getBoundingClientRect().width;
+            const visibleCards = Math.floor(viewportWidth / getSlideWidth());
+            const maxIndex = totalItems - visibleCards;
+
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateSlider();
+            }
+        });
+
+        window.addEventListener('resize', updateSlider);
+        setTimeout(updateSlider, 100);
+
+        // ==========================================
+        // ЛОГИКА ДОБАВЛЕНИЯ В КОРЗИНУ
+        // ==========================================
+        const buyButtons = document.querySelectorAll('.buy-btn');
+
+        buyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+
+                if (!currentUser) {
+                    alert('Пожалуйста, авторизуйтесь в профиле, чтобы сделать заказ!');
+                    window.location.href = 'profile.html';
+                    return;
+                }
+
+                if (currentUser.role === 'manager') {
+                    alert('Вы вошли как менеджер. Заказ товаров доступен только покупателям.');
+                    return;
+                }
+
+                const toyName = this.getAttribute('data-name');
+                const toyPrice = parseInt(this.getAttribute('data-price'));
+                const toyImg = this.getAttribute('data-img');
+
+                // Создаем отдельный ключ для промежуточной корзины текущего пользователя
+                const cartKey = 'userCart_' + currentUser.email;
+                let cart = JSON.parse(localStorage.getItem(cartKey)) || { items: [], totalPrice: 0 };
+
+                // Добавляем товар в массив корзины
+                cart.items.push({ name: toyName, price: toyPrice, img: toyImg });
+                cart.totalPrice += toyPrice;
+
+                // Сохраняем обновленную корзину
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+
+                alert(`Игрушка "${toyName}" успешно добавлена в корзину!\nПосмотреть её можно в Личном Кабинете.`);
+            });
+        });
+
+        // Навигация профиля
+        document.getElementById('profileLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentUser) {
+                window.location.href = currentUser.role === 'manager' ? 'mng.html' : 'pkp.html';
+            } else {
+                window.location.href = 'profile.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Петелька - О нас</title>
+    <style>
+        /* ==========================================================================
+           ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СТРАНИЦ САЙТА (Синхронизировано с вашими файлами)
+           ========================================================================== */
+        body {
+            background-color: #F2FEFF;   /* Светло-бирюзовый фон всего сайта */
+            color: #000;                 /* Основной цвет текста — черный */
+            font-family: Vollkorn BC;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        /* Шапка сайта (Header) */
+        .site-header {
+            background: #F2FEFF;            
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #C3E1E1; /* Тонкая бирюзовая линия снизу */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        /* Блок с логотипом */
+        .logo-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-img {
+            width: 55px;                 
+            height: auto;
+        }
+        .logo-text {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        /* Главное меню навигации */
+        .main-nav {
+            display: flex;
+            gap: 20px;                   
+        }
+        .nav-btn {
+            background: #C3E1E1;         /* Фирменный нежно-бирюзовый цвет кнопок */
+            color: #000;
+            text-decoration: none;
+            padding: 8px 30px;
+            border-radius: 20px;         /* Округлые кнопки */
+            font-family: Vollkorn BC;
+            font-size: 15px;
+            text-transform: uppercase;   /* Текст заглавными буквами */
+            font-weight: bolder;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: #9ECECE;         /* Затемнение кнопок при наведении / активная кнопка */
+        }
+
+        /* Иконки соцсетей и профиля справа */
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .icon-link {
+            color: #C3E1E1;              
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .icon-link:hover {
+            color: #9ECECE;
+        }
+        .icon-link img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Хлебные крошки / Текущий путь */
+        .breadcrumb {
+            padding: 15px 60px 0 60px;
+            font-size: 14px;
+            color: #9ecece;
+            text-transform: lowercase;
+        }
+
+        /* ==========================================================================
+           УНИКАЛЬНЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ "О НАС" (КАРТОЧКИ И СЕТКИ)
+           ========================================================================== */
+        .main-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Основная белая большая карточка */
+        .about-card {
+            background: #E1EFEF;
+            border: 2px solid #C3E1E1;
+            border-radius: 40px;
+            padding: 40px 60px;
+            box-shadow: 0 10px 30px rgba(195, 225, 225, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .about-title {
+            font-size: 32px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #2c4e4e;
+            font-weight: bold;
+        }
+
+        /* Сетка для текста и картинки */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .about-card {
+                padding: 30px 20px;
+            }
+        }
+
+        .about-text-side p {
+            font-size: 20px;
+            font-family: Vollkorn;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+            text-indent: 20px;
+        }
+
+        .about-image-side {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .about-main-img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .about-main-img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Секция преимуществ мастерской внизу */
+        .values-section {
+            margin-top: 50px;
+            border-top: 1px solid #E3F5F5;
+            padding-top: 35px;
+        }
+
+        .values-title {
+            font-size: 28px;
+            font-family: Vollkorn;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 1.5px;
+            color: #4A7A7A;
+            margin-bottom: 25px;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .value-item {
+            background: #f1ffff;
+            border: 1px solid #E3F5F5;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .value-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(195, 225, 225, 0.4);
+        }
+
+        .value-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .value-item h4 {
+            font-size: 18px;
+            font-family: Vollkorn;
+            margin: 0 0 10px 0;
+            color: #2c4e4e;
+            text-transform: uppercase;
+        }
+
+        .value-item p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #555;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="zzzzzzz.html" class="logo-block">
+            <img class="logo-img" src="C:\Users\Юлия\Desktop\сайт\image\vyazlog.png" alt="Петелька лого" onerror="this.src='image/vyazlog.png'">
+            <div class="logo-text">петелька</div>
+        </a>
+
+        <nav class="main-nav">
+            <a href="zzzzzzz.html" class="nav-btn">Главная</a>
+            <a href="katalog.html" class="nav-btn">Каталог</a>
+            <a href="otsivi.html" class="nav-btn">Отзывы</a>
+            <a href="onas.html" class="nav-btn active">О нас</a>
+            <a href="dostavka.html" class="nav-btn">Доставка</a>
+        </nav>
+
+        <div class="header-icons">
+            <a href="https://s00.yaplakal.com/pics/pics_original/7/4/5/20352547.jpg" class="icon-link" title="Макс">
+                <img src="image/max.png" alt="MAX" onerror="this.style.background='#ccc'">
+            </a>
+            <a href="https://vk.com/deadix" class="icon-link" title="ВКонтакте">
+                <img src="image/vk.png" alt="ВК" onerror="this.style.background='#ccc'">
+            </a>
+            <a href="https://t.me/d3ad1xx" class="icon-link" title="Telegram">
+                <img src="image/tg.png" alt="Telegram" onerror="this.style.background='#ccc'">
+            </a>
+            <a href="profile.html" class="icon-link" id="profileLink" title="Личный кабинет">
+                <img src="image/profile.png" alt="Профиль" onerror="this.style.background='#ccc'">
+            </a>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="zzzzzzz.html" style="color: #5A9E9E; text-decoration: none;">главная</a> / о нас
+    </div>
+
+    <main class="main-container">
+        
+        <div class="about-card">
+            <h1 class="about-title">О нашей мастерской</h1>
+            
+            <div class="about-grid">
+                <div class="about-text-side">
+                    <p>Добро пожаловать в «Петельку» — уютный уголок, где клубки мягкой гипоаллергенной пряжи превращаются в верных друзей для вас и ваших близких. Каждая наша игрушка создается полностью вручную, с особым трепетом и вниманием к каждой детали.</p>
+                    <p>Мы верим, что вязаная игрушка — это не просто элемент декора или подарок, это источник тепла, уюта и искренних детских воспоминаний. Мы тщательно отбираем материалы: используем только безопасный холлофайбер и мягкую качественную пряжу, которая отлично переносит стирку и долгие годы сохраняет свой первозданный вид.</p>
+                    <p>Наша цель — подарить улыбку и капельку волшебства каждому, кто прикасается к нашим изделиям. За каждой петелькой стоит большая любовь к своему делу!</p>
+                </div>
+                
+                <div class="about-image-side">
+                    <img class="about-main-img" src="image/jopa.png" alt="О нас" onerror="this.src='image/yarn_bg.jpg'; this.onerror=function(){this.style.background='#9ecece';}">
+                </div>
+            </div>
+
+            <div class="values-section">
+                <h3 class="values-title">Наши главные ориентиры</h3>
+                <div class="values-grid">
+                    <div class="value-item">
+                        <span class="value-icon">❤️</span>
+                        <h4>Сделано с душой</h4>
+                        <p>В каждую петельку мы вкладываем заботу, поэтому наши игрушки оживают и приносят тепло в каждый дом.</p>
+                    </div>
+                    <div class="value-item">
+                        <span class="value-icon">🌿</span>
+                        <h4>100% Безопасно</h4>
+                        <p>Используем только проверенные гипоаллергенные нити и наполнители, безопасные даже для самых маленьких детей.</p>
+                    </div>
+                    <div class="value-item">
+                        <span class="value-icon">✨</span>
+                        <h4>Эксклюзивность</h4>
+                        <p>Полностью ручная работа гарантирует, что ваша игрушка уникальна. Точной копии не существует во всем мире!</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        document.getElementById('profileLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                window.location.href = currentUser.role === 'manager' ? 'mng.html' : 'pkp.html';
+            } else {
+                window.location.href = 'profile.html';
+            }
+        });
+    </script>
+</body>
+</html>

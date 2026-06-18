@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Менеджер</title>
+    
+    <!-- Подключаем фирменный шрифт Vollkorn из макета -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           ОБЩИЕ СТИЛИ СТРАНИЦЫ (По макету image_f772ee.png)
+           ========================================================================== */
+        body {
+            background-color: #EDF8F9; /* Нежный пастельный фон */
+            color: #2F4F4F;
+            font-family: Vollkorn;    
+            margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Крошки */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 0 auto 15px auto;
+            font-size: 14px;
+            color: #9ecece;
+        }
+        .breadcrumb a {
+            color: #5A9E9E;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Главный заголовок */
+        h1.main-title {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #3B6262;
+        }
+
+        /* Двухколоночная сетка как в image_f772ee.png */
+        .lk-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .lk-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Общий стиль для всех карточек-контейнеров */
+        .lk-card {
+            background-color: #DBECEC;
+            border-radius: 20px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        /* ==========================================================================
+           ЛЕВАЯ КОЛОНКА: СТИЛИ ПРОФИЛЯ МЕНЕДЖЕРА
+           ========================================================================== */
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            height: fit-content;
+        }
+
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        /* Табличка под аватаром */
+        .role-badge {
+            background-color: #C3E1E1;
+            color: #2c4e4e;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            padding: 4px 16px;
+            border-radius: 20px;
+        }
+
+        /* Поля данных */
+        .profile-field-group {
+            margin-bottom: 20px;
+        }
+
+        .field-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6B8E8E;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .field-text-value {
+            font-size: 16px;
+            color: #2F4F4F;
+            padding-left: 2px;
+        }
+
+        .field-input {
+            width: 100%;
+            background-color: #FFFFFF;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-family: 'Vollkorn', serif;
+            font-size: 16px;
+            color: #2F4F4F;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .field-input:disabled {
+            background-color: #F4FAFA;
+            color: #7A9A9A;
+        }
+
+        /* Кнопки профиля */
+        .profile-btn {
+            font-family: 'Vollkorn', serif;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #BCDFDF;
+            color: #3B6262;
+            border: none;
+            margin-bottom: 12px;
+            margin-top: 10px;
+        }
+        .btn-primary:hover {
+            background-color: #A6D0D0;
+        }
+
+        .btn-secondary {
+            background-color: #FFFFFF;
+            color: #3B6262;
+            border: 1px solid #BCDFDF;
+        }
+        .btn-secondary:hover {
+            background-color: #F4FAFA;
+        }
+
+
+        /* ==========================================================================
+           ПРАВАЯ КОЛОНКА: ЗАКАЗЫ И РАБОТНИКИ
+           ========================================================================== */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .box-title {
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 1.5px;
+            color: #3B6262;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        /* Стилизация списка заказов внутри верхнего блока */
+        .manager-order-item {
+            background-color: #EDF8F9;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .manager-order-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .order-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #3B6262;
+        }
+
+        .order-row-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .order-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .order-toy-pic {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+            background-color: #fff;
+            border: 1px solid #BCDFDF;
+        }
+
+        .order-controls {
+            display: flex;
+            gap: 10px;
+            min-width: 160px;
+            flex-direction: column;
+        }
+
+        /* Выпадающие списки и цена */
+        .order-price-badge {
+            background: #BCDFDF;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            padding: 6px;
+            color: #3B6262;
+        }
+
+        .order-select-box {
+            background: #FFFFFF;
+            border: 1px solid #BCDFDF;
+            border-radius: 8px;
+            padding: 6px 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .order-select-box select {
+            border: none;
+            background: transparent;
+            font-family: 'Vollkorn', serif;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+            cursor: pointer;
+            color: #2F4F4F;
+        }
+
+        /* Стилизация блока работников (Нижний правый блок) */
+        .employee-row {
+            background-color: #EDF8F9;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .employee-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .employee-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .employee-schedule {
+            font-size: 14px;
+            color: #6B8E8E;
+        }
+        .day-label.work {
+            color: #2E6F40;
+            font-weight: bold;
+        }
+        .day-label.off {
+            color: #A34747;
+        }
+
+        .employee-hours {
+            font-weight: bold;
+            font-size: 16px;
+            color: #3B6262;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Навигационные крошки -->
+    <div class="breadcrumb">
+        <a href="zzzzzzz.html">главная</a> / личный кабинет
+    </div>
+
+    <!-- Заголовок страницы -->
+    <h1 class="main-title">Личный кабинет</h1>
+
+    <!-- Главная двухколоночная структура -->
+    <div class="lk-grid">
+        
+        <!-- ЛЕВАЯ КОЛОНКА: ПРОФИЛЬ (По макету покупателя) -->
+        <div class="lk-card profile-card">
+            
+            <div class="avatar-container">
+                <div class="avatar-circle"><img src="image/profile.png" alt="Личный кабинет"></div>
+                <div class="role-badge">Менеджер</div>
+            </div>
+
+            <form id="managerProfileForm">
+                <!-- Электронная почта -->
+                <div class="profile-field-group">
+                    <div class="field-label">Электронная почта</div>
+                    <div id="displayEmail" class="field-text-value">manager@petelka.com</div>
+                </div>
+
+                <!-- Ваше имя -->
+                <div class="profile-field-group">
+                    <div class="field-label">Ваше имя</div>
+                    <input type="text" id="inputName" class="field-input" value="Александр" disabled required>
+                </div>
+
+                <!-- Телефон -->
+                <div class="profile-field-group">
+                    <div class="field-label">Телефон</div>
+                    <input type="text" id="inputPhone" class="field-input" value="+7 (999) 123-45-67" disabled>
+                </div>
+
+                <!-- Кнопки управления -->
+                <button type="button" class="profile-btn btn-primary" id="btnEdit">Редактировать</button>
+                <button type="button" class="profile-btn btn-secondary" id="btnExit">Выйти из аккаунта</button>
+            </form>
+
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА: ЗАКАЗЫ + РАБОТНИКИ -->
+        <div class="right-column">
+            
+            <!-- БЛОК 1: ЗАКАЗЫ (вместо Корзины) -->
+            <div class="lk-card">
+                <h2 class="box-title">Заказы</h2>
+                
+                <!-- Карточка заказа 1 -->
+                <div class="manager-order-item">
+                    <div class="order-title">Заказ: №0001 от 01.06.2026</div>
+                    <div class="order-row-content">
+                        <div class="order-images">
+                            <img class="order-toy-pic" src="image/cat.png" alt="Игрушка" onerror="this.style.background='#ccc'">
+                            <img class="order-toy-pic" src="image/kotopes.png" alt="Игрушка" onerror="this.style.background='#ccc'">
+                        </div>
+                        <div class="order-controls">
+                            <div class="order-price-badge">2 500₽</div>
+                            <div class="order-select-box">
+                                <select>
+                                    <option value="processing" selected>В обработке</option>
+                                    <option value="assembling">Сборка</option>
+                                    <option value="shipping">В пути</option>
+                                    <option value="done">Выполнен</option>
+                                </select>
+                            </div>
+                            <div class="order-select-box">
+                                <select>
+                                    <option value="paid" selected>Оплачено</option>
+                                    <option value="unpaid">Не оплачено</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка заказа 2 -->
+                <div class="manager-order-item">
+                    <div class="order-title">Заказ: №0002 от 12.06.2026</div>
+                    <div class="order-row-content">
+                        <div class="order-images">
+                            <img class="order-toy-pic" src="image/octopus.png" alt="Игрушка" onerror="this.style.background='#ccc'">
+                        </div>
+                        <div class="order-controls">
+                            <div class="order-price-badge">2 200₽</div>
+                            <div class="order-select-box">
+                                <select>
+                                    <option value="processing">В обработке</option>
+                                    <option value="assembling" selected>Сборка</option>
+                                    <option value="shipping">В пути</option>
+                                    <option value="done">Выполнен</option>
+                                </select>
+                            </div>
+                            <div class="order-select-box">
+                                <select>
+                                    <option value="paid">Оплачено</option>
+                                    <option value="unpaid" selected>Не оплачено</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- БЛОК 2: ИНФОРМАЦИЯ О РАБОТНИКАХ (вместо Моих заказов) -->
+            <div class="lk-card">
+                <h2 class="box-title">Информация о работниках</h2>
+                
+                <!-- Работник 1 -->
+                <div class="employee-row">
+                    <div class="employee-name">Евлампий З.</div>
+                    <div class="employee-schedule">
+                        <span class="day-label work">пн</span>/<span class="day-label work">вт</span>/<span class="day-label work">ср</span>/<span class="day-label work">чт</span>/<span class="day-label work">пт</span>/<span class="day-label off">сб</span>/<span class="day-label off">вс</span>
+                    </div>
+                    <div class="employee-hours">40 ч.</div>
+                </div>
+
+                <!-- Работник 2 -->
+                <div class="employee-row">
+                    <div class="employee-name">Виолетта Б.</div>
+                    <div class="employee-schedule">
+                        <span class="day-label off">пн</span>/<span class="day-label off">вт</span>/<span class="day-label work">ср</span>/<span class="day-label work">чт</span>/<span class="day-label work">пт</span>/<span class="day-label work">сб</span>/<span class="day-label work">вс</span>
+                    </div>
+                    <div class="employee-hours">35 ч.</div>
+                </div>
+
+                <!-- Работник 3 -->
+                <div class="employee-row">
+                    <div class="employee-name">Анатолий П.</div>
+                    <div class="employee-schedule">
+                        <span class="day-label work">пн</span>/<span class="day-label work">вт</span>/<span class="day-label off">ср</span>/<span class="day-label off">чт</span>/<span class="day-label work">пт</span>/<span class="day-label work">сб</span>/<span class="day-label off">вс</span>
+                    </div>
+                    <div class="employee-hours">32 ч.</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Логика работы с LocalStorage и переключения режимов -->
+    <script>
+        // Проверка авторизации (из вашей системы)
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser || currentUser.role !== 'manager') {
+            // Если зашёл не менеджер, отправляем на авторизацию
+            window.location.href = 'profile.html';
+        }
+
+        // Загрузка актуальных данных во фреймворк страницы
+        function loadProfileData() {
+            document.getElementById('displayEmail').textContent = currentUser.email;
+            document.getElementById('inputName').value = currentUser.name || 'Менеджер';
+            document.getElementById('inputPhone').value = currentUser.phone || 'Укажите телефон';
+        }
+        loadProfileData();
+
+        // Логика кнопки редактирования
+        const btnEdit = document.getElementById('btnEdit');
+        const inputName = document.getElementById('inputName');
+        const inputPhone = document.getElementById('inputPhone');
+        let isEditing = false;
+
+        btnEdit.addEventListener('click', function() {
+            if (!isEditing) {
+                // Переход в режим редактирования
+                inputName.disabled = false;
+                inputPhone.disabled = false;
+                inputName.focus();
+                btnEdit.textContent = 'Сохранить';
+                isEditing = true;
+            } else {
+                // Сохранение изменений
+                currentUser.name = inputName.value.trim();
+                currentUser.phone = inputPhone.value.trim();
+                
+                // Обновляем текущую сессию
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Обновляем глобальную базу пользователей
+                let users = JSON.parse(localStorage.getItem('siteUsers')) || [];
+                let userIndex = users.findIndex(u => u.email === currentUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex].name = currentUser.name;
+                    users[userIndex].phone = currentUser.phone;
+                    localStorage.setItem('siteUsers', JSON.stringify(users));
+                }
+
+                inputName.disabled = true;
+                inputPhone.disabled = true;
+                btnEdit.textContent = 'Редактировать';
+                isEditing = false;
+                alert('Данные профиля успешно изменены!');
+            }
+        });
+
+        // Кнопка выхода
+        document.getElementById('btnExit').addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'profile.html';
+        });
+    </script>
+</body>
+</html>
